@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dark Themed UI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script
+  src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"
+  type="module"></script>
+</head>
+<body class="bg-[#121212] min-h-screen font-sans p-4 text-white">
+
+  <!-- Top Section -->
+  <div class="bg-[#1e1e1e] rounded-3xl p-6 relative">
+    <!-- Tree Image -->
+<div class="absolute -top-10 right-10 h-32 brightness-0 invert ">
+     <dotlottie-player
+  src="https://lottie.host/7c1a3d69-7953-4366-a4be-c7f229335d2b/BeMHaRvrjx.lottie"
+  background="transparent"
+  speed="1"
+  style="width: 300px; height: 300px"
+  loop
+  autoplay
+></dotlottie-player>
+</div>
+
+<dotlottie-player class="absolute -top-10"
+  src="https://lottie.host/dcfa6ce6-7c8b-499b-8eff-0e915b43f5ae/r8ZTqamlG2.lottie"
+  background="transparent"
+  speed="1"
+  style=" left: -70px; width: 300px; height: 300px"
+  loop
+  autoplay
+></dotlottie-player>
+
+    <!-- Main Text -->
+    <div class="flex items-center mt-10">
+  <!-- Right: Text content fully pushed to the right -->
+  <div class="w-1/2 pr-6 ml-auto">
+    <h1 class="text-4xl font-semibold leading-snug text-right">
+      Make<br />
+      <span class="whitespace-nowrap">your day</span><br />
+      <span class="font-bold text-white">more Fun</span>
+    </h1>
+    <p class="text-sm text-gray-400 mt-2 text-right">
+      Uncover the silent legends rooted in nature - every tree has a story.
+    </p>
+  </div>
+</div>
+
+  </div>
+
+  <!-- Description Section -->
+  <div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+    <h2 class="text-lg font-bold text-white mb-3">{{.Name}} Tree ({{.Botanical}})</h2>
+
+    <!-- Card with media -->
+    <div class="flex items-center bg-[#2a2a2a] rounded-lg p-3 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg"  class="rounded-lg w-12 h-12 object-cover" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain-cog-icon lucide-brain-cog"><path d="m10.852 14.772-.383.923"/><path d="m10.852 9.228-.383-.923"/><path d="m13.148 14.772.382.924"/><path d="m13.531 8.305-.383.923"/><path d="m14.772 10.852.923-.383"/><path d="m14.772 13.148.923.383"/><path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 0 0-5.63-1.446 3 3 0 0 0-.368 1.571 4 4 0 0 0-2.525 5.771"/><path d="M17.998 5.125a4 4 0 0 1 2.525 5.771"/><path d="M19.505 10.294a4 4 0 0 1-1.5 7.706"/><path d="M4.032 17.483A4 4 0 0 0 11.464 20c.18-.311.892-.311 1.072 0a4 4 0 0 0 7.432-2.516"/><path d="M4.5 10.291A4 4 0 0 0 6 18"/><path d="M6.002 5.125a3 3 0 0 0 .4 1.375"/><path d="m9.228 10.852-.923-.383"/>
+            <path d="m9.228 13.148-.923.383"/><circle cx="12" cy="12" r="3"/></svg>
+        <div class="ml-3 flex-1">
+        <p class="font-semibold text-sm text-white">AI summary</p>
+        <p class="text-xs text-gray-400">Listen now</p>
+      </div>
+      <button class="text-white-400 text-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play-icon lucide-circle-play"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></button>
+    </div>
+
+    <!-- Paragraph -->
+    <p class="text-sm text-gray-300 leading-relaxed">{{.Description}}</div>
+
+  <div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+    <h2 class="text-lg font-bold text-white mb-3">{{.Name}} Tree (Tree image)</h2>
+  <div class="w-full">
+    {{if gt (len .Images) 0}}
+  <img 
+    id="mainImage"
+    src="{{index .Images 0 "url"}}" 
+    alt="Tree Image" 
+    class="rounded-lg object-cover w-full h-auto cursor-pointer"
+    onclick="openModal(this.src)"
+  >
+{{else}}
+  <p class="text-gray-300 text-sm italic">No image available</p>
+{{end}}
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50">
+  <img id="modalImage" class="max-w-[90%] max-h-[90%] rounded-lg shadow-lg" />
+</div>
+
+<div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+  <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+    stroke-linecap="round" stroke-linejoin="round" 
+    class="lucide lucide-heart-pulse-icon lucide-heart-pulse">
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+    <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+  </svg>
+  Medical Uses
+</h2>
+    <p class="text-sm text-gray-300 leading-relaxed">{{.MedicinalBenefits}}</p>
+</div>
+
+{{if gt (len .Images) 1}}
+  <div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+    <h2 class="text-lg font-bold text-white mb-3">{{.Name}} Tree (Fruit image)</h2>
+    <div class="w-full">
+      <img 
+        id="mainImage"
+        src="{{index .Images 1 "url"}}" 
+        alt="Tree Image" 
+        class="rounded-lg object-cover w-full h-auto cursor-pointer"
+        onclick="openModal(this.src)"
+      >
+    </div>
+  </div>
+{{end}}
+
+
+<div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+  <h2 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+      stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf">
+      <path d="M2 22s12-4 20-20" />
+      <path d="M14 14c0-4.418 0-6 6-6" />
+      <path d="M10 10c0-4.418 0-6 6-6" />
+    </svg>
+    Why This Tree Is Important
+  </h2>
+  <p class="text-sm text-gray-300 leading-relaxed">{{.Environmental}}</p>
+</div>
+
+<div class="mt-6 rounded-xl shadow-md p-4">
+  <div class="space-y-2">
+
+    <!-- Item 1 -->
+    <div onclick="toggleAnswer(this)" class="faq-item cursor-pointer bg-[#eeeeee] text-black font-medium rounded-md px-4 py-2">
+  <div class="flex items-center justify-between">
+    <span class="text-lg font-bold">+</span>
+    <span class="ml-3 flex-1 text-sm">Is this tree from here?</span>
+  </div>
+  {{if eq .Native "Yes"}}
+    <p class="answer text-gray-700 text-sm mt-2 hidden">
+      Yes, this tree is native to this region and commonly found in similar climates.
+    </p>
+  {{else}}
+    <p class="answer text-gray-700 text-sm mt-2 hidden">
+      No, this tree is not originally native to this region but may still grow well here.
+    </p>
+  {{end}}
+</div>
+
+
+    <!-- Item 2 -->
+    <div onclick="toggleAnswer(this)" class="faq-item cursor-pointer bg-[#eeeeee] text-black font-medium rounded-md px-4 py-2">
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold">+</span>
+        <span class="ml-3 flex-1 text-sm">Is it a rare tree?</span>
+      </div>
+      <p class="answer text-gray-700 text-sm mt-2 hidden">While not very rare, it is valued for its unique appearance and ecological benefits.</p>
+    </div>
+
+    <!-- Item 3 -->
+    <div onclick="toggleAnswer(this)" class="faq-item cursor-pointer bg-[#eeeeee] text-black font-medium rounded-md px-4 py-2">
+      <div class="flex items-center justify-between">
+        <span class="text-lg font-bold">+</span>
+        <span class="ml-3 flex-1 text-sm">Is this an endangered tree?</span>
+      </div>
+      <p class="answer text-gray-700 text-sm mt-2 hidden">Currently, it is not listed as endangered, but its habitat is under environmental pressure.</p>
+    </div>
+  </div>
+</div>
+
+{{if .Classification}}
+<div class="mt-6 rounded-xl shadow-md p-4">
+  <h2 class="text-lg font-bold text-white mb-3">🌿 Tree Classification</h2>
+  <ul class="text-sm text-gray-300 leading-relaxed space-y-2 list-disc list-inside">
+    {{range $key, $value := .Classification}}
+      <li><strong>{{$key}}:</strong> {{$value}}</li>
+    {{end}}
+  </ul>
+</div>
+{{end}}
+
+
+{{if gt (len .Images) 0}}
+<div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+  <div class="flex items-center mb-3 space-x-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+         class="lucide lucide-camera-icon lucide-camera text-white">
+      <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+      <circle cx="12" cy="13" r="3"/>
+    </svg>
+    <h2 class="text-lg font-bold text-white">Gallery</h2>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    {{range .Images}}
+      <img src="{{.url}}" 
+           alt="Gallery Image" 
+           class="rounded-lg object-cover w-full h-40 cursor-pointer"
+           onclick="openModal(this.src)">
+    {{end}}
+  </div>
+</div>
+{{end}}
+
+
+{{if .Location}}
+<div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
+  <div class="flex items-center mb-3 space-x-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-map-pin text-white" width="24" height="24" fill="none"
+         viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path d="M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z"/>
+      <circle cx="12" cy="10" r="3"/>
+    </svg>
+    <h2 class="text-lg font-bold text-white">Location</h2>
+  </div>
+
+  <div class="text-sm text-gray-300 space-y-2">
+    {{if .Location.site}}<p><span class="font-semibold text-white">Site:</span> {{.Location.site}}</p>{{end}}
+    {{if .Location.city}}<p><span class="font-semibold text-white">City:</span> {{.Location.city}}</p>{{end}}
+    {{if .Location.coordinates}}<p><span class="font-semibold text-white">Coordinates:</span> {{.Location.coordinates}}</p>{{end}}
+    {{if .Location.address}}<p><span class="font-semibold text-white">Address:</span> {{.Location.address}}</p>{{end}}
+  </div>
+</div>
+{{end}}
+
+
+<footer class="bg-[#1a1a1a] mt-8 p-4 rounded-t-xl text-center text-gray-400 text-sm">
+  <p>© 2025 GreenCircle Tree Project. All rights reserved.</p>
+  <p class="mt-1">
+    <a href="#" class="hover:text-white underline">Privacy Policy</a> · 
+    <a href="#" class="hover:text-white underline">Terms of Service</a>
+  </p>
+</footer>
+
+
+
+</body>
+<script>
+  function openModal(src) {
+    document.getElementById("modalImage").src = src;
+    document.getElementById("imageModal").classList.remove("hidden");
+    document.getElementById("imageModal").classList.add("flex");
+  }
+
+  document.getElementById("imageModal").addEventListener("click", function () {
+    this.classList.remove("flex");
+    this.classList.add("hidden");
+  });
+
+  //togel button
+    function toggleAnswer(element) {
+    const answer = element.querySelector('.answer');
+    const icon = element.querySelector('span');
+    answer.classList.toggle('hidden');
+    icon.textContent = answer.classList.contains('hidden') ? '+' : '−';
+  }
+</script>
+</html>
