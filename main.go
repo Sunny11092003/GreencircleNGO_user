@@ -5,12 +5,12 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 
 	firebase "firebase.google.com/go"
 	"firebase.google.com/go/db"
-	"google.golang.org/api/option"
-
 	"github.com/gorilla/mux"
+	"google.golang.org/api/option"
 )
 
 var firebaseClient *db.Client
@@ -35,24 +35,34 @@ type Tree struct {
 
 func main() {
 	ctx := context.Background()
+
+	// Optional: use environment variable for JSON file path
+	credPath := os.Getenv("FIREBASE_CREDENTIALS_JSON")
+	if credPath == "" {
+		credPath = "treeqrsystem-firebase-adminsdk-fbsvc-8b56ea8e0c.json"
+	}
+
 	conf := &firebase.Config{
 		DatabaseURL: "https://treeqrsystem-default-rtdb.firebaseio.com/",
 	}
-	opt := option.WithCredentialsFile("treeqrsystem-firebase-adminsdk-fbsvc-8b56ea8e0c.json")
+	opt := option.WithCredentialsFile(credPath)
+
 	app, err := firebase.NewApp(ctx, conf, opt)
 	if err != nil {
 		log.Fatalf("Error initializing Firebase: %v", err)
 	}
+
 	firebaseClient, err = app.Database(ctx)
 	if err != nil {
-		log.Fatalf("Error initializing database client: %v", err)
+		log.Fatalf("Error initializing Firebase DB client: %v", err)
 	}
 
 	r := mux.NewRouter()
-	r.HandleFunc("/tree/{id}", handleTreePage)
-	http.Handle("/", r)
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	r.HandleFunc("/tree/{id}", handleTreePage).Methods("GET")
+
 	log.Println("Server started at :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
 func handleTreePage(w http.ResponseWriter, r *http.Request) {
@@ -69,5 +79,7 @@ func handleTreePage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl := template.Must(template.ParseFiles("static/index.html"))
-	tmpl.Execute(w, tree)
+	if err := tmpl.Execute(w, tree); err != nil {
+		http.Error(w, "Failed to render page", http.StatusInternalServerError)
+	}
 }
