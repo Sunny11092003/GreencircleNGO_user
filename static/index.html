@@ -11,45 +11,34 @@
 </head>
 <body class="bg-[#121212] min-h-screen font-sans p-4 text-white">
 
-  <!-- Top Section -->
-  <div class="bg-[#1e1e1e] rounded-3xl p-6 relative">
-    <!-- Tree Image -->
-<div class="absolute -top-10 right-10 h-32 brightness-0 invert ">
-     <dotlottie-player
-  src="https://lottie.host/7c1a3d69-7953-4366-a4be-c7f229335d2b/BeMHaRvrjx.lottie"
-  background="transparent"
-  speed="1"
-  style="width: 300px; height: 300px"
-  loop
-  autoplay
-></dotlottie-player>
-</div>
+<!-- Top Section -->
+<!-- Top Section for Green Circle Website with Logo Left-Aligned to Text -->
+<div class="bg-[#1e1e1e] rounded-3xl p-6 relative text-white">
+  <div class="flex flex-col md:flex-row justify-between items-center">
+  
+      <div>
+        <img src="https://green-circle.org/wp-content/uploads/2025/04/cropped-gc-png-file-2022-2.png?w=971&h=1024" 
+     alt="Green Circle Logo" 
+     class="w-12 h-12 rounded-full shadow-md mr-4 object-cover relative -top-1">
 
-<dotlottie-player class="absolute -top-10"
-  src="https://lottie.host/dcfa6ce6-7c8b-499b-8eff-0e915b43f5ae/r8ZTqamlG2.lottie"
-  background="transparent"
-  speed="1"
-  style=" left: -70px; width: 300px; height: 300px"
-  loop
-  autoplay
-></dotlottie-player>
+        <h1 class="text-3xl font-bold mb-1">Green Circle</h1>
+        <p class="text-gray-400 text-sm md:text-base max-w-xl">
+          Empowering communities to protect and preserve nature. Dive into the world of trees, discover their stories, and contribute to a greener planet.
+        </p>
+      </div>
+    </div>
 
-    <!-- Main Text -->
-    <div class="flex items-center mt-10">
-  <!-- Right: Text content fully pushed to the right -->
-  <div class="w-1/2 pr-6 ml-auto">
-    <h1 class="text-4xl font-semibold leading-snug text-right">
-      Make<br />
-      <span class="whitespace-nowrap">your day</span><br />
-      <span class="font-bold text-white">more Fun</span>
-    </h1>
-    <p class="text-sm text-gray-400 mt-2 text-right">
-      Uncover the silent legends rooted in nature - every tree has a story.
-    </p>
+    <!-- Call-to-action Button -->
+    <div class="mt-4 md:mt-0">
+      <a href="/community" 
+         class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-full text-sm font-medium shadow-md transition">
+        Join the Movement
+      </a>
+    </div>
+    
   </div>
 </div>
 
-  </div>
 
   <!-- Description Section -->
   <div class="bg-[#1a1a1a] mt-6 rounded-xl shadow-md p-4">
@@ -63,8 +52,17 @@
         <p class="font-semibold text-sm text-white">AI summary</p>
         <p class="text-xs text-gray-400">Listen now</p>
       </div>
-      <button class="text-white-400 text-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-play-icon lucide-circle-play"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></button>
-    </div>
+<button onclick="toggleTTS('{{.ID}}')" class="text-white-400 text-lg">
+  <svg id="playPauseIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+       viewBox="0 0 24 24" fill="none" stroke="currentColor"
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+       class="lucide lucide-circle-play-icon">
+    <circle cx="12" cy="12" r="10"/>
+    <polygon id="playIconShape" points="10 8 16 12 10 16 10 8"/>
+  </svg>
+</button>
+<audio id="ttsAudio" hidden></audio>
+</div>
 
     <!-- Paragraph -->
     <p class="text-sm text-gray-300 leading-relaxed">{{.Description}}</div>
@@ -241,8 +239,6 @@
   </p>
 </footer>
 
-
-
 </body>
 <script>
   function openModal(src) {
@@ -263,5 +259,39 @@
     answer.classList.toggle('hidden');
     icon.textContent = answer.classList.contains('hidden') ? '+' : '−';
   }
+
+  //audio
+let isPlaying = false;
+
+function toggleTTS(treeID) {
+  const audio = document.getElementById('ttsAudio');
+  const playIcon = document.getElementById('playIconShape');
+
+  if (!isPlaying) {
+    fetch(`/generate-description/${treeID}`)
+      .then(res => res.text())
+      .then(text => {
+        const audioUrl = `/speak?text=${encodeURIComponent(text)}`;
+        audio.src = audioUrl;
+        audio.play();
+        isPlaying = true;
+        playIcon.setAttribute('points', '6 8 18 12 6 16 6 8');
+      })
+      .catch(err => {
+        alert("AI generation failed");
+        console.error(err);
+      });
+  } else {
+    audio.pause();
+    audio.currentTime = 0;
+    playIcon.setAttribute('points', '10 8 16 12 10 16 10 8');
+    isPlaying = false;
+  }
+
+  audio.onended = () => {
+    isPlaying = false;
+    playIcon.setAttribute('points', '10 8 16 12 10 16 10 8');
+  };
+}
 </script>
 </html>
